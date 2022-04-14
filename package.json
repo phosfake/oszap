@@ -7,5 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  },
+  "dependencies": {
+    "@typedorm/common": "^1.14.9",
+    "@typedorm/core": "^1.14.9",
+    "aws-sdk": "^2.1095.0",
+    "class-validator": "^0.13.2"
+  }
 }

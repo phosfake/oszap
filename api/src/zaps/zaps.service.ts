@@ -1,10 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { IZap } from '../../../model/zap.model';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { from, Observable } from 'rxjs';
+import { DynamoDBService } from 'src/core/dynamodb/dynamodb.service';
+import { Zap } from 'src/model/zap/zap.model';
 
 @Injectable()
 export class ZapsService {
-  public get(id: string): Observable<IZap> {
-    throw new Error('Method is not defined ' + id);
+  constructor(private dynamoDb: DynamoDBService) {}
+
+  public get(id: string): Promise<Zap> {
+    const toGet = new Zap();
+    toGet.id = id;
+    toGet.name = 'test zap';
+    throw 'not implemented';
+    //return from(this.dynamoDb.mapper.get<Zap>(toGet));
+  }
+
+  public create(zap: Zap): Promise<Zap> {
+    return this.dynamoDb.entityManager.create<Zap>(zap);
   }
 }
