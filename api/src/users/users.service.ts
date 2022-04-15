@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { from, map, mergeMap, Observable, tap } from 'rxjs';
 import { DynamoDBService } from 'src/core/dynamodb/dynamodb.service';
 import { DeletionSuccess, FindResult } from 'src/core/typedorm/typedorm.model';
 import { User } from 'src/model/user/user.model';
@@ -12,7 +11,7 @@ import { User } from 'src/model/user/user.model';
 export class UsersService {
   constructor(private dynamoDb: DynamoDBService) {}
 
-  public get(id: string): Observable<User> {
+  public get(id: string): Promise<User> {
     const toGet = new User();
     toGet.id = '6d9255da-3ee0-4748-b441-56bcb644b38b';
     toGet.name = 'test zap';

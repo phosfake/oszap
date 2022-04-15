@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Connection } from '@typedorm/core';
 import { resetTestConnection } from '@typedorm/testing';
-import { firstValueFrom } from 'rxjs';
 import { DynamoDBService } from 'src/core/dynamodb/dynamodb.service';
 import { DeletionSuccess, FindResult } from 'src/core/typedorm/typedorm.model';
 import { MockTypeDORMConnectionFactory } from 'src/core/typedorm/mock-typedorm-connection.factory';
@@ -10,7 +9,7 @@ import { Zap } from 'src/model/zap/zap.model';
 import { ZapTrigger } from 'src/model/zap/zap-trigger.model';
 import { DocumentClient, QueryOutput } from 'aws-sdk/clients/dynamodb';
 
-fdescribe('UsersService', () => {
+describe('UsersService', () => {
   let service: UsersService;
   let mockDocumentClient: {
     delete?: jest.Mock<any, any>;

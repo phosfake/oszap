@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { IsAlphanumeric, IsEmail, IsNotEmpty } from 'class-validator';
-import { Observable } from 'rxjs';
 import { DeletionSuccess } from 'src/core/typedorm/typedorm.model';
 import { User } from 'src/model/user/user.model';
 import { UsersService } from './users.service';
@@ -20,12 +19,12 @@ export class UsersController {
   constructor(private zapsService: UsersService) {}
 
   @Get(':id')
-  get(@Param('id') id: string): Observable<User> {
+  async get(@Param('id') id: string): Promise<User> {
     return this.zapsService.get(id);
   }
 
   @Post()
-  create(@Body() createUserParams: CreateUserDto): Observable<User> {
+  async create(@Body() createUserParams: CreateUserDto): Promise<User> {
     const user: User = new User();
     user.name = createUserParams.name;
     user.email = createUserParams.email;
@@ -34,7 +33,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string): Observable<DeletionSuccess> {
+  async delete(@Param('id') id: string): Promise<DeletionSuccess> {
     return this.zapsService.delete(id);
   }
 }

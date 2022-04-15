@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { from, Observable } from 'rxjs';
+import { Injectable } from '@nestjs/common';
 import { DynamoDBService } from 'src/core/dynamodb/dynamodb.service';
 import { Zap } from 'src/model/zap/zap.model';
 
