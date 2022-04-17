@@ -1,4 +1,3 @@
-# TODO: Move into CDK IAC
 aws dynamodb delete-table \
     --table-name zaps \
     --endpoint http://localhost:8000
