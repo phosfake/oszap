@@ -13,26 +13,19 @@ export class ZapServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const lambdaLayer = new LayerVersion(this, 'BackendLayer', {
-      code: Code.fromAsset('../api/node_modules'),
-      compatibleRuntimes: [Runtime.NODEJS_12_X, Runtime.NODEJS_10_X]
-    });
-
-    const zapApiLambda = new Function(this, 'BackendHandler', {
-      runtime: Runtime.NODEJS_12_X,
-      code: Code.fromAsset('../api/dist'),
-      handler: 'lambda.handler',
-      layers: [lambdaLayer],
-      environment: {
-        NODE_PATH: '$NODE_PATH:/opt'
-      }
-    });
+    const zapApiLambda = this.createApiLambda();
 
     const zapApiGateway = new LambdaRestApi(this, 'ZapLambdaApi', {
       handler: zapApiLambda
     });
 
-    const dynamoDb = new Table(this, 'zaps', {
+    const dynamoDb = this.createDynamoDb();
+
+    dynamoDb.grantFullAccess(zapApiLambda);
+  }
+
+  private createDynamoDb(): Table {
+    const dynamoDb: Table = new Table(this, 'zaps', {
       tableName: 'zaps',
       partitionKey: {
         name: 'PK',
@@ -58,6 +51,25 @@ export class ZapServiceStack extends Stack {
       }
     });
 
-    dynamoDb.grantFullAccess(zapApiLambda);
+    return dynamoDb;
+  }
+
+  private createApiLambda(): Function {
+    const lambdaLayer = new LayerVersion(this, 'BackendLayer', {
+      code: Code.fromAsset('../api/node_modules'),
+      compatibleRuntimes: [Runtime.NODEJS_12_X, Runtime.NODEJS_10_X]
+    });
+
+    const lambda = new Function(this, 'BackendHandler', {
+      runtime: Runtime.NODEJS_12_X,
+      code: Code.fromAsset('../api/dist'),
+      handler: 'lambda.handler',
+      layers: [lambdaLayer],
+      environment: {
+        NODE_PATH: '$NODE_PATH:/opt'
+      }
+    });
+
+    return lambda;
   }
 }
