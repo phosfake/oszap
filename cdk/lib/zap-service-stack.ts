@@ -1,5 +1,11 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
+import {
+  AttributeType,
+  BillingMode,
+  Table,
+  TableClass
+} from 'aws-cdk-lib/aws-dynamodb';
 import { Code, Function, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
@@ -25,5 +31,33 @@ export class ZapServiceStack extends Stack {
     const zapApiGateway = new LambdaRestApi(this, 'ZapLambdaApi', {
       handler: zapApiLambda
     });
+
+    const dynamoDb = new Table(this, 'zaps', {
+      tableName: 'zaps',
+      partitionKey: {
+        name: 'PK',
+        type: AttributeType.STRING
+      },
+      sortKey: {
+        name: 'SK',
+        type: AttributeType.STRING
+      },
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      tableClass: TableClass.STANDARD
+    });
+
+    dynamoDb.addGlobalSecondaryIndex({
+      indexName: 'GSI1',
+      partitionKey: {
+        name: 'GSI1PK',
+        type: AttributeType.STRING
+      },
+      sortKey: {
+        name: 'GSI1SK',
+        type: AttributeType.STRING
+      }
+    });
+
+    dynamoDb.grantFullAccess(zapApiLambda);
   }
 }
