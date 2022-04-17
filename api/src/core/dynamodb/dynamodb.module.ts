@@ -6,11 +6,11 @@ import { User } from 'src/model/user/user.model';
 import { DynamoDBService } from './dynamodb.service';
 import { table } from './dynamodb.tables';
 
-export const DYNAMODB_CONFIG: ServiceConfigurationOptions = {
-  endpoint: process.env.DYNAMODB_HOST || 'http://localhost:8000',
-  region: process.env.AWS_REGION || 'us-east-1',
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'local',
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'local'
+const LOCAL_DYNAMODB_CONFIG: ServiceConfigurationOptions = {
+  endpoint: 'http://localhost:8000',
+  region: 'us-east-1',
+  accessKeyId: 'local',
+  secretAccessKey: 'local'
 };
 
 @Module({
@@ -18,10 +18,17 @@ export const DYNAMODB_CONFIG: ServiceConfigurationOptions = {
     {
       provide: Connection,
       useFactory: () => {
+        console.log('Environment', process.env);
+        let dynamoConfig: ServiceConfigurationOptions = undefined;
+        // If there's no access key, then we're not in a deployed environment, so use local config
+        if (!process.env.AWS_ACCESS_KEY_ID) {
+          dynamoConfig = LOCAL_DYNAMODB_CONFIG;
+        }
+        console.log('Initializing ddb connection', dynamoConfig);
         return createConnection({
           table: table,
           entities: [User],
-          documentClient: new DocumentClient(DYNAMODB_CONFIG)
+          documentClient: new DocumentClient(dynamoConfig)
         });
       }
     },
