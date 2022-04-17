@@ -8,7 +8,7 @@ export const table = new Table({
     GSI1: {
       type: INDEX_TYPE.GSI,
       partitionKey: 'GSI1PK',
-      sortKey: 'GS1SK'
+      sortKey: 'GSI1SK'
     }
   }
 });

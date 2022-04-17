@@ -16,11 +16,11 @@ export class CreateUserDto {
 
 @Controller('users')
 export class UsersController {
-  constructor(private zapsService: UsersService) {}
+  constructor(private userService: UsersService) {}
 
   @Get(':id')
   async get(@Param('id') id: string): Promise<User> {
-    return this.zapsService.get(id);
+    return this.userService.get(id);
   }
 
   @Post()
@@ -29,11 +29,11 @@ export class UsersController {
     user.name = createUserParams.name;
     user.email = createUserParams.email;
 
-    return this.zapsService.create(user);
+    return this.userService.create(user);
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<DeletionSuccess> {
-    return this.zapsService.delete(id);
+    return this.userService.delete(id);
   }
 }
