@@ -4,9 +4,15 @@
   "description": "Web interface for oszap",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "bash ./scripts/deploy.sh"
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build --stream",
+    "deploy:ci": "lerna run deploy:ci --stream",
+    "prune": "lerna run prune --stream",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
 }

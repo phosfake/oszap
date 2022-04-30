@@ -3,6 +3,7 @@ import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import {
   AttributeType,
   BillingMode,
+  ITable,
   Table,
   TableClass
 } from 'aws-cdk-lib/aws-dynamodb';
@@ -13,18 +14,21 @@ export class ZapServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const zapApiLambda = this.createApiLambda();
+    const zapApiLambda: Function = this.createApiLambda();
 
-    const zapApiGateway = new LambdaRestApi(this, 'ZapLambdaApi', {
+    new LambdaRestApi(this, 'ZapLambdaApi', {
       handler: zapApiLambda
     });
 
-    const dynamoDb = this.createDynamoDb();
+    let zapsTable: ITable = Table.fromTableName(this, id, 'zaps');
+    if (!zapsTable) {
+      zapsTable = this.createZapsDynamoTable();
+    }
 
-    dynamoDb.grantFullAccess(zapApiLambda);
+    zapsTable.grantFullAccess(zapApiLambda);
   }
 
-  private createDynamoDb(): Table {
+  private createZapsDynamoTable(): Table {
     const dynamoDb: Table = new Table(this, 'zaps', {
       tableName: 'zaps',
       partitionKey: {
