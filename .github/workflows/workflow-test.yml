@@ -27,12 +27,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
-      # - name: Configure aws credentials
-      #   uses: aws-actions/configure-aws-credentials@master
-      #   with:
-      #     aws-access-key-id: todo #${{ secrets.AWS_ACCESS_KEY }}
-      #     aws-secret-access-key: todo #${{ secrets.AWS_SECRET_KEY }}
-      #     aws-region: "us-east-1"
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: "us-east-1"
       - name: Install dependencies
         run: npm install
       - name: Bootstrap packages
