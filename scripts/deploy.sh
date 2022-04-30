@@ -3,4 +3,4 @@ npm install
 nest build
 npm prune --production
 cd ../cdk
-cdk deploy
+npx cdk deploy
